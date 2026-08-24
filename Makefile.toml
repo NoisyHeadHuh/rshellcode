@@ -1,0 +1,20 @@
+[tasks.clean]
+description = "cleans everything up"
+script = [
+    "cargo clean"
+]
+
+[tasks.build]
+description = "build stage2"
+command = "rustup"
+args = ["run", "nightly-x86_64-pc-windows-msvc", "cargo", "rustc", "--target", "x86_64-pc-windows-msvc", "--release"]
+env = { "RUSTFLAGS" = "-C codegen-units=1 -C strip=symbols -C opt-level=z -C link-arg=/NODEFAULTLIB -C link-arg=/ENTRY:_start -C link-arg=/SUBSYSTEM:CONSOLE -C link-arg=/OPT:REF,ICF -C link-arg=/SAFESEH:NO -C link-arg=/DEBUG:NONE -C link-arg=/FILEALIGN:512 -C link-arg=/ALIGN:16 -C link-arg=/SECTION:.bss,D -C link-arg=/SECTION:.edata,D -C link-arg=/SECTION:.idata,D -C link-arg=/SECTION:.pdata,D -C link-arg=/SECTION:.xdata,D"}
+
+[tasks.objcopy]
+description = "Converts the stripped MSVC binary to a .bin file using objcopy."
+command = "objcopy"
+args = ["-O", "binary", "target/x86_64-pc-windows-msvc/release/stage2-clean.exe", "stage2.bin"]
+
+[tasks.stage-2]
+description = "Make stage2.bin"
+dependencies = ["build", "objcopy"]

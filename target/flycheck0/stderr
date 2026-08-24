@@ -1,0 +1,3 @@
+warning: Cargo.toml: unused manifest key: profile.release.codegen-uints
+warning: `stage2-clean` (manifest) generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.06s
